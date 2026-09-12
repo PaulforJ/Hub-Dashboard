@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Premium Commercial Hub — Wuse Zone 3, Abuja</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap');
+
+  :root{
+    --navy:#0B2A4A;
+    --navy-deep:#071B33;
+    --gold:#C89B3C;
+    --sand:#F6F2EA;
+    --ink:#1B2430;
+    --muted:#5C6B7A;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:'Inter', sans-serif;
+    color:var(--ink);
+    background:var(--sand);
+    line-height:1.5;
+  }
+  h1,h2,h3{font-family:'Fraunces', serif; font-weight:600; line-height:1.1;}
+  img{max-width:100%; display:block;}
+  a{color:inherit; text-decoration:none;}
+  .wrap{max-width:1080px; margin:0 auto; padding:0 24px;}
+
+  /* NAV */
+  .nav{
+    background:var(--navy-deep);
+    color:#fff;
+    padding:18px 0;
+  }
+  .nav .wrap{display:flex; align-items:center; justify-content:space-between;}
+  .brand{display:flex; align-items:center; gap:10px; font-weight:700; letter-spacing:.02em;}
+  .brand .mark{
+    width:34px; height:34px; border-radius:6px;
+    background:var(--gold); color:var(--navy-deep);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Fraunces',serif; font-weight:700;
+  }
+  .nav-cta{
+    background:var(--gold); color:var(--navy-deep);
+    padding:10px 18px; border-radius:4px; font-weight:600; font-size:14px;
+  }
+
+  /* HERO */
+  .hero{
+    position:relative;
+    background:
+      linear-gradient(180deg, rgba(7,27,51,.6), rgba(7,27,51,.9)),
+      url('hero_building.jpg') center 35%/cover;
+    color:#fff;
+    padding:100px 0 90px;
+  }
+  .hero .eyebrow{
+    color:var(--gold); font-weight:600; font-size:14px;
+    display:flex; align-items:center; gap:8px; margin-bottom:18px;
+  }
+  .hero h1{
+    font-size:clamp(34px, 5vw, 58px);
+    max-width:680px;
+    margin-bottom:20px;
+  }
+  .hero p.lead{
+    max-width:520px; font-size:18px; color:#DCE4EC; margin-bottom:34px;
+  }
+  .hero-ctas{display:flex; gap:14px; flex-wrap:wrap;}
+  .btn{
+    display:inline-block; padding:14px 26px; border-radius:4px;
+    font-weight:600; font-size:15px; cursor:pointer; border:none;
+  }
+  .btn-gold{background:var(--gold); color:var(--navy-deep);}
+  .btn-outline{border:1px solid rgba(255,255,255,.5); color:#fff;}
+
+  /* WHY */
+  .why{padding:80px 0 60px;}
+  .why-head{max-width:600px; margin-bottom:46px;}
+  .why-head h2{font-size:32px; margin-bottom:14px;}
+  .why-head p{color:var(--muted); font-size:16px;}
+  .cols{display:grid; grid-template-columns:1fr 1fr; gap:40px;}
+  .col h3{font-size:19px; margin-bottom:14px; color:var(--navy);}
+  .col ul{list-style:none;}
+  .col li{
+    padding:12px 0; border-bottom:1px solid #E4DED0;
+    display:flex; gap:12px; font-size:15px; color:var(--ink);
+  }
+  .col li .dot{
+    width:6px; height:6px; border-radius:50%; background:var(--gold);
+    margin-top:8px; flex-shrink:0;
+  }
+
+  /* FEATURES STRIP */
+  .strip{
+    background:var(--navy); color:#fff;
+    padding:44px 0;
+  }
+  .strip .wrap{
+    display:grid; grid-template-columns:repeat(5,1fr); gap:20px;
+    text-align:center;
+  }
+  .strip-item .num{font-family:'Fraunces',serif; font-size:15px; color:var(--gold); margin-bottom:6px; font-weight:600;}
+  .strip-item .label{font-size:13px; color:#C7D2DC;}
+
+  /* UNITS */
+  .units{padding:80px 0;}
+  .units h2{font-size:32px; margin-bottom:10px;}
+  .units > .wrap > p{color:var(--muted); margin-bottom:40px; max-width:560px;}
+  table{width:100%; border-collapse:collapse; background:#fff; border:1px solid #E4DED0;}
+  th,td{padding:16px 20px; text-align:left; font-size:15px;}
+  thead th{
+    background:var(--navy); color:#fff; font-weight:600; font-size:13px;
+    letter-spacing:.01em;
+  }
+  tbody tr:not(:last-child) td{border-bottom:1px solid #EFEAE0;}
+  tbody tr:nth-child(even){background:#FBF9F4;}
+  .price{color:var(--navy); font-weight:700; font-family:'Fraunces',serif;}
+
+  /* GALLERY */
+  .gallery{padding:0 0 80px;}
+  .gallery .grid{display:grid; grid-template-columns:1.3fr 1fr; gap:16px;}
+  .gallery img{border-radius:4px; height:100%; object-fit:cover;}
+
+  /* FORM */
+  .capture{
+    background:var(--navy-deep); color:#fff; padding:70px 0;
+  }
+  .capture .box{
+    max-width:640px; margin:0 auto; text-align:center;
+  }
+  .capture h2{font-size:30px; margin-bottom:14px;}
+  .capture p{color:#C7D2DC; margin-bottom:34px; font-size:16px;}
+  .form{
+    display:grid; grid-template-columns:1fr 1fr; gap:14px; text-align:left;
+  }
+  .form input, .form select{
+    width:100%; padding:13px 14px; border-radius:4px; border:1px solid #2C4A68;
+    background:#0F2A47; color:#fff; font-size:14px; font-family:inherit;
+  }
+  .form input::placeholder{color:#8FA3B5;}
+  .form .full{grid-column:1/-1;}
+  .form button{
+    grid-column:1/-1; margin-top:6px;
+  }
+
+  /* FOOTER */
+  footer{background:#fff; padding:40px 0; border-top:1px solid #E4DED0;}
+  footer .wrap{
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;
+  }
+  footer .contact{font-size:14px; color:var(--muted);}
+  footer .contact strong{color:var(--ink);}
+  .badge{
+    position:fixed; bottom:0; left:0; right:0;
+    background:var(--gold); color:var(--navy-deep);
+    text-align:center; font-size:12px; font-weight:600;
+    padding:8px; letter-spacing:.02em;
+  }
+
+  @media(max-width:720px){
+    .cols{grid-template-columns:1fr;}
+    .strip .wrap{grid-template-columns:repeat(2,1fr);}
+    .gallery .grid{grid-template-columns:1fr;}
+    .form{grid-template-columns:1fr;}
+    table{font-size:13px;}
+    th,td{padding:12px 10px;}
+  }
+</style>
+</head>
+<body>
+
+  <div class="nav">
+    <div class="wrap">
+      <div class="brand"><span class="mark">BN</span> Build Now Real Estate — Abuja</div>
+      <a href="#capture" class="nav-cta">Book Inspection</a>
+    </div>
+  </div>
+
+  <section class="hero">
+    <div class="wrap">
+      <div class="eyebrow">Wuse Zone 3, Abuja</div>
+      <h1>Own a space where your business grows with the city.</h1>
+      <p class="lead">A 6-storey commercial development with a glass façade, 3 elevators, and units from 25sqm to 100sqm+ — built for offices, retail, and investment.</p>
+      <div class="hero-ctas">
+        <a href="#units" class="btn btn-gold">See Available Units</a>
+        <a href="#capture" class="btn btn-outline">Book a Private Presentation</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="strip">
+    <div class="wrap">
+      <div class="strip-item"><div class="num">6</div><div class="label">Storeys</div></div>
+      <div class="strip-item"><div class="num">3</div><div class="label">Elevators</div></div>
+      <div class="strip-item"><div class="num">25–100+</div><div class="label">Sqm units</div></div>
+      <div class="strip-item"><div class="num">24/7</div><div class="label">Security</div></div>
+      <div class="strip-item"><div class="num">En Suite</div><div class="label">All units</div></div>
+    </div>
+  </section>
+
+  <section class="why">
+    <div class="wrap">
+      <div class="why-head">
+        <h2>Built for owners and investors alike</h2>
+        <p>Whether you're moving your business out of rented space or adding a tangible asset to your portfolio, the Hub is designed around how commercial space actually gets used in Abuja.</p>
+      </div>
+      <div class="cols">
+        <div class="col">
+          <h3>For business owners</h3>
+          <ul>
+            <li><span class="dot"></span>Own your premises and stop paying rent</li>
+            <li><span class="dot"></span>A modern glass façade that lifts your brand image</li>
+            <li><span class="dot"></span>Strategic Wuse Zone 3 location with strong foot traffic</li>
+            <li><span class="dot"></span>Fits offices, retail stores, showrooms and restaurants</li>
+          </ul>
+        </div>
+        <div class="col">
+          <h3>For investors</h3>
+          <ul>
+            <li><span class="dot"></span>Potential rental income from day one</li>
+            <li><span class="dot"></span>Strong capital appreciation in a growing corridor</li>
+            <li><span class="dot"></span>A tangible asset you can retain, lease or resell</li>
+            <li><span class="dot"></span>A practical way to diversify a portfolio</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="gallery">
+    <div class="wrap">
+      <div class="grid">
+        <img src="gallery_building.jpg" alt="Premium Commercial Hub exterior render, day">
+        <img src="hero_building.jpg" alt="Premium Commercial Hub exterior render, night">
+      </div>
+    </div>
+  </section>
+
+  <section class="units" id="units">
+    <div class="wrap">
+      <h2>Available units</h2>
+      <p>Ground floor through the sixth floor — price per square metre, by floor.</p>
+      <table>
+        <thead>
+          <tr><th>Floor</th><th>Price per sqm</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Ground floor</td><td class="price">₦4,875,000</td></tr>
+          <tr><td>First floor</td><td class="price">₦4,675,000</td></tr>
+          <tr><td>Second floor</td><td class="price">₦4,475,000</td></tr>
+          <tr><td>Third floor</td><td class="price">₦4,175,000</td></tr>
+          <tr><td>Fourth floor</td><td class="price">₦3,975,000</td></tr>
+          <tr><td>Fifth floor</td><td class="price">₦3,775,000</td></tr>
+          <tr><td>Sixth floor</td><td class="price">₦3,695,000</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="capture" id="capture">
+    <div class="wrap">
+      <div class="box">
+        <h2>Book a private presentation</h2>
+        <p>Secure your preferred unit before the next price review. Leave your details and Emmanuel will reach out directly.</p>
+        <form class="form" onsubmit="return false;">
+          <input type="text" placeholder="Full name">
+          <input type="tel" placeholder="Phone number">
+          <input type="email" class="full" placeholder="Email address">
+          <select class="full">
+            <option>Preferred floor — Ground floor</option>
+            <option>Preferred floor — First to Third floor</option>
+            <option>Preferred floor — Fourth to Sixth floor</option>
+          </select>
+          <button type="submit" class="btn btn-gold full">Request a Callback</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <div class="contact">
+        <strong>Emmanuel Adams</strong> · Investment Advisor, Build Now Real Estate Abuja<br>
+        07064496005 · emmanueladams01@gmail.com<br>
+        A3 First Floor, Millennium Builders Plaza, Herbert Macaulay Way, Opp NNPC Towers, CBD Abuja
+      </div>
+      <div class="contact">Wuse Zone 3, Abuja</div>
+    </div>
+  </footer>
+
+  <div style="height:44px"></div>
+  <div class="badge">PREVIEW MOCKUP — layout only, not yet live or connected</div>
+
+</body>
+</html>
