@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard, Premium Commercial Hub</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+  :root{
+    --navy:#0D1520;
+    --stone-bg:#F7F6F3;
+    --stone-line:#E3E0D8;
+    --ink:#181C22;
+    --muted:#666D76;
+    --amber:#D89A3E;
+    --green:#2F7A4F;
+    --red:#B4383A;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font-family:'Inter',sans-serif; color:var(--ink); background:var(--stone-bg); line-height:1.5;}
+  .wrap{max-width:1040px; margin:0 auto; padding:0 24px;}
+  a{color:inherit;}
+
+  /* LOGIN SCREEN */
+  .login-screen{min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px;}
+  .login-card{background:#fff; border:1px solid var(--stone-line); padding:40px; max-width:380px; width:100%;}
+  .login-card h1{font-size:20px; font-weight:800; margin-bottom:6px;}
+  .login-card p{font-size:14px; color:var(--muted); margin-bottom:24px;}
+  .login-card input{
+    width:100%; padding:12px 14px; border:1px solid var(--stone-line); border-radius:3px;
+    font-size:14px; font-family:inherit; margin-bottom:12px; background:#FAFAF8;
+  }
+  .login-card button{
+    width:100%; padding:13px; border:none; border-radius:3px; background:var(--navy); color:#fff;
+    font-weight:700; font-size:14px; cursor:pointer;
+  }
+  .login-card button:disabled{opacity:.6; cursor:not-allowed;}
+  .login-error{color:var(--red); font-size:13px; margin-top:12px; min-height:16px; font-weight:600;}
+
+  /* DASHBOARD */
+  .dash{display:none;}
+  .dash-nav{background:var(--navy); color:#fff; padding:20px 0;}
+  .dash-nav .wrap{display:flex; align-items:center; justify-content:space-between;}
+  .dash-nav h1{font-size:16px; font-weight:800;}
+  .dash-nav button{
+    background:none; border:1px solid #3A4552; color:#fff; padding:8px 16px; border-radius:3px;
+    font-size:13px; font-weight:600; cursor:pointer; font-family:inherit;
+  }
+
+  .stat-row{display:grid; grid-template-columns:repeat(4,1fr); gap:16px; padding:32px 0 8px;}
+  .stat-card{background:#fff; border:1px solid var(--stone-line); padding:22px;}
+  .stat-card .n{font-size:28px; font-weight:800; color:var(--navy);}
+  .stat-card .l{font-size:13px; color:var(--muted); margin-top:4px;}
+
+  .panel{background:#fff; border:1px solid var(--stone-line); margin:24px 0 48px;}
+  .panel-head{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 22px; border-bottom:1px solid var(--stone-line);
+  }
+  .panel-head h2{font-size:16px; font-weight:700;}
+  .panel-head button{
+    background:none; border:1px solid var(--stone-line); padding:7px 14px; border-radius:3px;
+    font-size:12px; font-weight:600; cursor:pointer; font-family:inherit; color:var(--ink);
+  }
+  table{width:100%; border-collapse:collapse; font-size:13px;}
+  th{text-align:left; padding:12px 22px; background:var(--stone-bg); color:var(--muted); font-weight:700; font-size:11px; text-transform:uppercase; letter-spacing:.04em;}
+  td{padding:14px 22px; border-top:1px solid var(--stone-line);}
+  .empty-row{padding:32px 22px; text-align:center; color:var(--muted); font-size:14px;}
+  .loading-row{padding:32px 22px; text-align:center; color:var(--muted); font-size:14px;}
+
+  @media(max-width:760px){
+    .stat-row{grid-template-columns:1fr 1fr;}
+    table{display:block; overflow-x:auto; white-space:nowrap;}
+  }
+</style>
+</head>
+<body>
+
+  <div class="login-screen" id="loginScreen">
+    <div class="login-card">
+      <h1>Admin dashboard</h1>
+      <p>Sign in to view leads and site traffic for Premium Commercial Hub.</p>
+      <input type="email" id="loginEmail" placeholder="Email address">
+      <input type="password" id="loginPassword" placeholder="Password">
+      <button id="loginBtn">Sign in</button>
+      <div class="login-error" id="loginError"></div>
+    </div>
+  </div>
+
+  <div class="dash" id="dash">
+    <div class="dash-nav">
+      <div class="wrap">
+        <h1>Premium Commercial Hub, Admin Dashboard</h1>
+        <button id="logoutBtn">Sign out</button>
+      </div>
+    </div>
+
+    <div class="wrap">
+      <div class="stat-row">
+        <div class="stat-card"><div class="n" id="statTotalLeads">-</div><div class="l">Total leads</div></div>
+        <div class="stat-card"><div class="n" id="statLeadsToday">-</div><div class="l">Leads today</div></div>
+        <div class="stat-card"><div class="n" id="statTotalViews">-</div><div class="l">Total page views</div></div>
+        <div class="stat-card"><div class="n" id="statViewsToday">-</div><div class="l">Page views today</div></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Leads</h2>
+          <button id="refreshBtn">Refresh</button>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Phone</th>
+              <th>Email</th>
+              <th>Preferred floor</th>
+              <th>Submitted</th>
+            </tr>
+          </thead>
+          <tbody id="leadsBody">
+            <tr><td class="loading-row" colspan="5">Loading...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script>
+    /* ==========================================================================
+       This dashboard uses the same Supabase project as the main site.
+       It reads data as a logged-in user, which the public site cannot do.
+
+       One-time setup in Supabase:
+
+       1. Run this SQL once in the SQL Editor, in addition to the leads and
+          page_views tables already created for the main site:
+
+          create policy "Allow authenticated read on leads"
+            on leads for select
+            to authenticated
+            using (true);
+
+          create policy "Allow authenticated read on page_views"
+            on page_views for select
+            to authenticated
+            using (true);
+
+       2. In the Supabase dashboard, go to Authentication > Users > Add user,
+          and create a login (email and password) for whoever should be able
+          to view this dashboard, such as Emmanuel or Paul.
+
+       3. Share this file and that login with only the people who should see
+          lead data. Anyone with the login can sign in from anywhere.
+       ========================================================================== */
+
+    const SUPABASE_URL = 'https://swbstuvjqgizcmltadwc.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN3YnN0dXZqcWdpemNtbHRhZHdjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkyOTg4NTgsImV4cCI6MjEwNDg3NDg1OH0.b2A1LeKlz0MPCdp6Q-xZSZqgUNLKsPcozUnxkKvT6hc';
+
+    const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const loginScreen = document.getElementById('loginScreen');
+    const dash = document.getElementById('dash');
+    const loginBtn = document.getElementById('loginBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const loginError = document.getElementById('loginError');
+    const refreshBtn = document.getElementById('refreshBtn');
+
+    function isSameDay(dateStr) {
+      const d = new Date(dateStr);
+      const now = new Date();
+      return d.getFullYear() === now.getFullYear() &&
+             d.getMonth() === now.getMonth() &&
+             d.getDate() === now.getDate();
+    }
+
+    function formatDate(dateStr) {
+      const d = new Date(dateStr);
+      return d.toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' }) +
+             ' ' + d.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+    }
+
+    async function loadDashboard() {
+      const leadsBody = document.getElementById('leadsBody');
+      leadsBody.innerHTML = '<tr><td class="loading-row" colspan="5">Loading...</td></tr>';
+
+      const { data: leads, error: leadsErr } = await client
+        .from('leads')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      const { data: views, error: viewsErr } = await client
+        .from('page_views')
+        .select('created_at');
+
+      if (leadsErr || viewsErr) {
+        leadsBody.innerHTML = '<tr><td class="empty-row" colspan="5">Could not load data. Check that the read policies have been created in Supabase.</td></tr>';
+        console.error(leadsErr || viewsErr);
+        return;
+      }
+
+      document.getElementById('statTotalLeads').textContent = leads.length;
+      document.getElementById('statLeadsToday').textContent = leads.filter(l => isSameDay(l.created_at)).length;
+      document.getElementById('statTotalViews').textContent = views.length;
+      document.getElementById('statViewsToday').textContent = views.filter(v => isSameDay(v.created_at)).length;
+
+      if (leads.length === 0) {
+        leadsBody.innerHTML = '<tr><td class="empty-row" colspan="5">No leads yet.</td></tr>';
+        return;
+      }
+
+      leadsBody.innerHTML = leads.map(function (lead) {
+        return '<tr>' +
+          '<td>' + (lead.full_name || '') + '</td>' +
+          '<td>' + (lead.phone || '') + '</td>' +
+          '<td>' + (lead.email || '-') + '</td>' +
+          '<td>' + (lead.preferred_floor || '-') + '</td>' +
+          '<td>' + formatDate(lead.created_at) + '</td>' +
+          '</tr>';
+      }).join('');
+    }
+
+    function showDashboard() {
+      loginScreen.style.display = 'none';
+      dash.style.display = 'block';
+      loadDashboard();
+    }
+
+    function showLogin() {
+      loginScreen.style.display = 'flex';
+      dash.style.display = 'none';
+    }
+
+    loginBtn.addEventListener('click', async function () {
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      loginError.textContent = '';
+      loginBtn.disabled = true;
+      loginBtn.textContent = 'Signing in...';
+
+      const { error } = await client.auth.signInWithPassword({ email: email, password: password });
+
+      loginBtn.disabled = false;
+      loginBtn.textContent = 'Sign in';
+
+      if (error) {
+        loginError.textContent = 'Incorrect email or password.';
+        return;
+      }
+      showDashboard();
+    });
+
+    logoutBtn.addEventListener('click', async function () {
+      await client.auth.signOut();
+      showLogin();
+    });
+
+    refreshBtn.addEventListener('click', loadDashboard);
+
+    client.auth.getSession().then(function (result) {
+      if (result.data.session) {
+        showDashboard();
+      } else {
+        showLogin();
+      }
+    });
+  </script>
+
+</body>
+</html>
