@@ -225,12 +225,70 @@
       loginScreen.style.display = 'none';
       dash.style.display = 'block';
       loadDashboard();
+      markActive();
+      startHeartbeat();
     }
 
     function showLogin() {
       loginScreen.style.display = 'flex';
       dash.style.display = 'none';
+      stopHeartbeat();
     }
+
+    /* ==========================================================================
+       SESSION TIMEOUT
+       ==========================================================================
+       Supabase keeps a login active for a long time by default. This section
+       forces a fresh sign-in if the dashboard has been left unattended (tab
+       closed, backgrounded, or the browser closed) for longer than the limit
+       below. Adjust SESSION_TIMEOUT_MS to change how long that grace period is.
+       ========================================================================== */
+
+    const SESSION_TIMEOUT_MS = 5 * 60 * 1000;
+    const LAST_ACTIVE_KEY = 'dashboardLastActiveAt';
+    let heartbeatInterval = null;
+
+    function markActive() {
+      localStorage.setItem(LAST_ACTIVE_KEY, String(Date.now()));
+    }
+
+    function startHeartbeat() {
+      stopHeartbeat();
+      heartbeatInterval = setInterval(markActive, 20000);
+    }
+
+    function stopHeartbeat() {
+      if (heartbeatInterval) {
+        clearInterval(heartbeatInterval);
+        heartbeatInterval = null;
+      }
+    }
+
+    async function enforceSessionTimeout() {
+      const lastActive = parseInt(localStorage.getItem(LAST_ACTIVE_KEY) || '0', 10);
+      const away = Date.now() - lastActive;
+
+      if (lastActive && away > SESSION_TIMEOUT_MS) {
+        await client.auth.signOut();
+        showLogin();
+        return true;
+      }
+      return false;
+    }
+
+    document.addEventListener('visibilitychange', function () {
+      if (document.visibilityState === 'hidden') {
+        markActive();
+        stopHeartbeat();
+      } else if (document.visibilityState === 'visible' && dash.style.display === 'block') {
+        enforceSessionTimeout().then(function (timedOut) {
+          if (!timedOut) {
+            markActive();
+            startHeartbeat();
+          }
+        });
+      }
+    });
 
     loginBtn.addEventListener('click', async function () {
       const email = document.getElementById('loginEmail').value.trim();
@@ -256,11 +314,17 @@
       showLogin();
     });
 
-    refreshBtn.addEventListener('click', loadDashboard);
+    refreshBtn.addEventListener('click', function () {
+      markActive();
+      loadDashboard();
+    });
 
-    client.auth.getSession().then(function (result) {
+    client.auth.getSession().then(async function (result) {
       if (result.data.session) {
-        showDashboard();
+        const timedOut = await enforceSessionTimeout();
+        if (!timedOut) {
+          showDashboard();
+        }
       } else {
         showLogin();
       }
